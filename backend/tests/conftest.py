@@ -1,10 +1,14 @@
 import pytest
+import os
 from app import create_app, db
 from models import User, Profile, Account, Loan, Scenario, Result
 
 @pytest.fixture
 def app():
     """Create and configure a test app instance"""
+    # Override DATABASE_URL for testing
+    os.environ['DATABASE_URL'] = 'sqlite:///:memory:'
+    
     app = create_app()
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
