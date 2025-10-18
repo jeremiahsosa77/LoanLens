@@ -28,8 +28,10 @@ def amortization():
             extra_payment=float(data.get('extra_payment', 0))
         )
         return jsonify(result), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Invalid input parameters'}), 400
+    except Exception:
+        return jsonify({'error': 'Calculation failed'}), 500
 
 @calculate_bp.route('/apr', methods=['POST'])
 @jwt_required()
@@ -48,8 +50,10 @@ def apr():
             fees=float(data.get('fees', 0))
         )
         return jsonify({'apr': result}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Invalid input parameters'}), 400
+    except Exception:
+        return jsonify({'error': 'Calculation failed'}), 500
 
 @calculate_bp.route('/dti', methods=['POST'])
 @jwt_required()
@@ -66,8 +70,10 @@ def dti():
             monthly_gross_income=float(data['monthly_gross_income'])
         )
         return jsonify({'dti': result}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Invalid input parameters'}), 400
+    except Exception:
+        return jsonify({'error': 'Calculation failed'}), 500
 
 @calculate_bp.route('/payoff', methods=['POST'])
 @jwt_required()
@@ -85,8 +91,10 @@ def payoff():
             extra_payment=float(data.get('extra_payment', 0))
         )
         return jsonify(result), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except (ValueError, TypeError, KeyError):
+        return jsonify({'error': 'Invalid input parameters'}), 400
+    except Exception:
+        return jsonify({'error': 'Calculation failed'}), 500
 
 @calculate_bp.route('/refinance', methods=['POST'])
 @jwt_required()
@@ -105,8 +113,10 @@ def refinance():
             refinance_costs=float(data.get('refinance_costs', 0))
         )
         return jsonify(result), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except (ValueError, TypeError, KeyError):
+        return jsonify({'error': 'Invalid input parameters'}), 400
+    except Exception:
+        return jsonify({'error': 'Calculation failed'}), 500
 
 @calculate_bp.route('/monthly-payment', methods=['POST'])
 @jwt_required()
@@ -124,5 +134,7 @@ def monthly_payment():
             term_months=int(data['term_months'])
         )
         return jsonify({'monthly_payment': result}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    except (ValueError, TypeError):
+        return jsonify({'error': 'Invalid input parameters'}), 400
+    except Exception:
+        return jsonify({'error': 'Calculation failed'}), 500
